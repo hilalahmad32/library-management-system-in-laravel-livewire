@@ -7,27 +7,50 @@ use Livewire\Component;
 
 class Setting extends Component
 {
+    public $showTable = true;
+    public $updateForm = false;
+
+    public $setting_id;
     public $return_days;
     public $fine;
-    public $setting_id;
 
     public function render()
     {
         $settings = ModelsSetting::find(1);
+        return view('livewire.setting', compact('settings'))->layout('layout.app');
+    }
+
+    public function goBack()
+    {
+        $this->showTable = true;
+        $this->updateForm = false;
+    }
+
+    public function editSetting($id)
+    {
+        $this->showTable = false;
+        $this->updateForm = true;
+        $settings = ModelsSetting::find($id);
         $this->setting_id = $settings->id;
-        return view('livewire.setting')->layout('layout.app');
+        $this->return_days = $settings->return_days;
+        $this->fine = $settings->fine;
     }
 
     public function update($id)
     {
-        $settings = ModelsSetting::find(1);
+        $settings = ModelsSetting::find($id);
+
         $settings->return_days = $this->return_days;
         $settings->fine = $this->fine;
         $result = $settings->save();
         if ($result) {
             session()->flash('success', 'Setting Update Successfully');
+            $this->showTable = true;
+            $this->updateForm = false;
+            $this->return_days = '';
+            $this->fine = '';
         } else {
-            session()->flash('error', 'Setting Not Update Successfully');
+            session()->flash('error', 'Category Not Update Successfully');
         }
     }
 }
