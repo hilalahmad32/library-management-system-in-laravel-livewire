@@ -11,4 +11,9 @@ class Student extends Model
 
     protected $table = 'students';
     protected $fillable = ['name', 'email', 'phone', 'address', 'gender', 'classes'];
+
+    public function issues()
+    {
+        return $this->hasMany(IssueBook::class);
+    }
 }

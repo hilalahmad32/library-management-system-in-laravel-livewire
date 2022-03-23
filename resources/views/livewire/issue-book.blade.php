@@ -1,15 +1,15 @@
 <div>
-    <x-slot name="title">{{ __('Category') }}</x-slot>
+    <x-slot name="title">{{ __('Issue Book') }}</x-slot>
     <a
         class="flex items-center justify-between p-4 mb-8 mt-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
         <div class="flex items-center">
-            <span>{{ __('Books (4)') }}</span>
+            <span>{{ __('Issue Book (4)') }}</span>
         </div>
         <span>
             <button
                 class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                 wire:click="showForm">
-                Create Book
+                Issue Book
             </button>
         </span>
     </a>
@@ -25,6 +25,7 @@
                 <input
                     class="w-75 py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                     wire:model="search" type="text" placeholder="Search Here..." />
+
             </div>
         </div>
         <div class="w-full overflow-hidden rounded-lg shadow-xs my-4">
@@ -34,44 +35,45 @@
                         <tr
                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                             <th class="px-4 py-3">Id</th>
-                            <th class="px-4 py-3">Book Name</th>
-                            <th class="px-4 py-3">Category</th>
-                            <th class="px-4 py-3">Publisher</th>
-                            <th class="px-4 py-3">Author</th>
-                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Name</th>
+                            <th class="px-4 py-3">Book</th>
+                            <th class="px-4 py-3">Issue_date</th>
+                            <th class="px-4 py-3">Return_date</th>
+                            <th class="px-4 py-3">Issue_status</th>
                             <th class="px-4 py-3">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        @foreach ($books as $book)
+                        @foreach ($issues as $issue)
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-4 py-3">
                                     <div class="flex items-center text-sm">
                                         <div>
-                                            <p class="font-semibold">{{ $book->id }}</p>
+                                            <p class="font-semibold">{{ $issue->id }}</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $book->book_name }}
+                                    {{ $issue->students->name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $book->categories->category_name }}
+                                    {{ $issue->books->book_name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $book->publishers->publisher_name}}
+                                    {{ $issue->issue_date }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $book->authors->author_name }}
+                                    {{ $issue->return_date }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $book->book_status == 'Y' ? 'Available' : "Not Available" }}
+                                    {{ $issue->issue_status == 'Y' ? 'Return' : 'Not Return' }}
                                 </td>
+
                                 <td class="px-4 py-3">
                                     <div class="flex items-center space-x-4 text-sm">
                                         <button
                                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                            aria-label="Edit" wire:click="editBook({{ $book->id }})">
+                                            aria-label="Edit" wire:click="editBook({{ $issue->id }})">
                                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
                                                 viewBox="0 0 20 20">
                                                 <path
@@ -81,7 +83,7 @@
                                         </button>
                                         <button
                                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                            aria-label="Delete" wire:click="deleteBook({{ $book->id }})">
+                                            aria-label="Delete" wire:click="deleteBook({{ $issue->id }})">
                                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
                                                 viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd"
@@ -109,40 +111,26 @@
             Go Back
         </button>
         <form action="" wire:submit.prevent="store">
-           
-            <input
-                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="book_name" type="text" />
-                @error('book_name')
+            <select wire:model.lazy="book_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the Book</option>
+                @foreach ($books as $book)
+                    <option value="{{ $book->id }}">{{ $book->book_name }}</option>
+                @endforeach
+            </select>
+            @error('book_id')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
-            <select wire:model.lazy="category_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the category</option>
-                @foreach ($categorys as $category)
-                <option value="{{$category->id}}">{{$category->category_name}}</option>
+            <select wire:model.lazy="student_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the Student</option>
+                @foreach ($students as $student)
+                    <option value="{{ $student->id }}">{{ $student->name }}</option>
                 @endforeach
             </select>
-            @error('category_id')
-            <span class="text-red-600">{{ $message }}</span> <br>
-        @enderror
-            <select wire:model.lazy="publisher_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the publisher</option>
-                @foreach ($publishers as $publisher)
-                <option value="{{$publisher->id}}">{{$publisher->publisher_name}}</option>
-                @endforeach
-            </select>
-            @error('publisher_id')
-            <span class="text-red-600">{{ $message }}</span> <br>
-        @enderror
-            <select wire:model.lazy="author_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the author</option>
-                @foreach ($authors as $author)
-                <option value="{{$author->id}}">{{$author->author_name}}</option>
-                @endforeach
-            </select>
-            @error('author_id')
-            <span class="text-red-600">{{ $message }}</span> <br>
-        @enderror
+            @error('student_id')
+                <span class="text-red-600">{{ $message }}</span> <br>
+            @enderror
             <button
                 class="px-4 py-2 my-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                 type="submit">
@@ -150,43 +138,42 @@
             </button>
         </form>
     @endif
+
     @if ($updateForm == true)
-        {{-- update Category --}}
+        {{-- create-Category --}}
         <button
             class="px-4 py-2 my-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-black-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
             type="submit" wire:click="goBack">
             Go Back
         </button>
-        <form action="" wire:submit.prevent="update({{ $book_id }})">
-            <input
-            class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-            wire:model.lazy="edit_book_name" type="text" />
-            
-        <select wire:model.lazy="edit_category_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-            <option   selected>Enter the category</option>
-            @foreach ($categorys as $category)
-            <option value="{{$category->id}}">{{$category->category_name}}</option>
-            @endforeach
-        </select>
-       
-        <select wire:model.lazy="edit_publisher_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-            <option   selected>Enter the publisher</option>
-            @foreach ($publishers as $publisher)
-            <option value="{{$publisher->id}}">{{$publisher->publisher_name}}</option>
-            @endforeach
-        </select>
-        <select wire:model.lazy="edit_author_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-            <option   selected>Enter the author</option>
-            @foreach ($authors as $author)
-            <option value="{{$author->id}}">{{$author->author_name}}</option>
-            @endforeach
-        </select>
+        <div class="">
+            <h4>Name :{{ $student_name }}</h4>
+            <h4>Email : {{ $email }}</h4>
+            <h4>phone:{{ $phone }}</h4>
+            <h4>issue_date :{{ $issue_date }}</h4>
+            <h4>return_date : {{ $return_date }}</h4>
+            @if ($issue_status == 'Y')
+                <span>Status : Returned</span>
+            @else
+                @if (date('Y-m-d') > $return_date)
+                    <span>Fine : @php
+                        $date1 = date_create(date('Y-m-d'));
+                        $date2 = date_create($return_date);
+                        $diff = date_diff($date1, $date2);
+                        $days = $diff->format('$a');
+                    @endphp {{ $days }}</span>
+                @endif
+            @endif
+
+        </div>
+
+        @if ($issue_status == 'N')
             <button
                 class="px-4 py-2 my-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                type="submit">
-                Update
+                type="submit" wire:click="returnBook({{ $issue_id }})">
+                return
             </button>
-        </form>
-        <!-- End of modal backdrop -->
+        @endif
     @endif
+
 </div>

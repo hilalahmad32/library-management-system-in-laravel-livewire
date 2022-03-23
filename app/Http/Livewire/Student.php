@@ -17,9 +17,22 @@ class Student extends Component
     public $phone;
     public $gender;
     public $classes;
+
+    public $student_id;
+    public $edit_name;
+    public $edit_email;
+    public $edit_address;
+    public $edit_phone;
+    public $edit_gender;
+    public $edit_classes;
+
+    public $search;
     public function render()
     {
-
+        if ($this->search) {
+            $students = ModelsStudent::where('name', 'LIKE', '%' . $this->search . '%')->orderBy('id', 'DESC')->get();
+            return view('livewire.student', compact('students'))->layout('layout.app');
+        }
         $students = ModelsStudent::orderBy('id', 'DESC')->get();
 
         return view('livewire.student', compact('students'))->layout('layout.app');
@@ -40,6 +53,14 @@ class Student extends Component
         $this->phone = "";
         $this->gender = "";
         $this->classes = "";
+
+        $this->student_id = "";
+        $this->edit_name = "";
+        $this->edit_email = "";
+        $this->edit_address = "";
+        $this->edit_phone = "";
+        $this->edit_gender = "";
+        $this->edit_classes = "";
     }
     public function goBack()
     {
@@ -68,6 +89,54 @@ class Student extends Component
             $this->resetField();
         } else {
             session()->flash('error', 'Student Not Add Successfully');
+        }
+    }
+
+    public function editStudent($id)
+    {
+        $this->showTable = false;
+        $this->updateForm = true;
+        $students = ModelsStudent::findOrFail($id);
+
+        $this->student_id = $students->id;
+        $this->edit_name = $students->name;
+        $this->edit_email = $students->email;
+        $this->edit_address = $students->address;
+        $this->edit_phone = $students->phone;
+        $this->edit_gender = $students->gender;
+        $this->edit_classes = $students->classes;
+    }
+
+    public function update($id)
+    {
+        $this->showTable = false;
+        $this->updateForm = true;
+        $students = ModelsStudent::findOrFail($id);
+
+        $students->name = $this->edit_name;
+        $students->email = $this->edit_email;
+        $students->address = $this->edit_address;
+        $students->phone = $this->edit_phone;
+        $students->gender = $this->edit_gender;
+        $students->classes = $this->edit_classes;
+        $result = $students->save();
+        if ($result) {
+            session()->flash('success', 'Student Update Successfully');
+            $this->showTable = true;
+            $this->updateForm = false;
+            $this->resetField();
+        } else {
+            session()->flash('error', 'Student Not Update Successfully');
+        }
+    }
+
+    public function deleteStudent($id)
+    {
+        $result = ModelsStudent::findOrFail($id)->delete();
+        if ($result) {
+            session()->flash('success', 'Student Delete Successfully');
+        } else {
+            session()->flash('error', 'Student Not Delete Successfully');
         }
     }
 }
