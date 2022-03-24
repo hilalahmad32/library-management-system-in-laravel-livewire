@@ -28,12 +28,15 @@ class IssueBook extends Component
     public $issue_date;
     public $return_date;
     public $book_status;
+
+    public $totalIssueBook;
     public function render()
     {
+        $this->totalIssueBook = ModelsIssueBook::count();
         $this->students = Student::orderBy('id', 'DESC')->get();
         $this->books = Book::where('book_status', 'Y')->orderBy('id', 'DESC')->get();
 
-        $issues = ModelsIssueBook::orderBy('id', 'DESC')->get();
+        $issues = ModelsIssueBook::orderBy('id', 'DESC')->paginate(6);
         return view('livewire.issue-book', compact('issues'))->layout('layout.app');
     }
 

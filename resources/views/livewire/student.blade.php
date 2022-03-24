@@ -3,7 +3,7 @@
     <a
         class="flex items-center justify-between p-4 mb-8 mt-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
         <div class="flex items-center">
-            <span>{{ __('Students (4)') }}</span>
+            <span>{{ __('Students ') }} {{ __($totalStudent) }}</span>
         </div>
         <span>
             <button
@@ -25,7 +25,7 @@
                 <input
                     class="w-75 py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                     wire:model="search" type="text" placeholder="Search Here..." />
-                    
+
             </div>
         </div>
         <div class="w-full overflow-hidden rounded-lg shadow-xs my-4">
@@ -72,7 +72,7 @@
                                 <td class="px-4 py-3 text-sm">
                                     {{ $student->classes }}
                                 </td>
-                                
+
                                 <td class="px-4 py-3">
                                     <div class="flex items-center space-x-4 text-sm">
                                         <button
@@ -103,6 +103,8 @@
                     </tbody>
                 </table>
             </div>
+
+            {{ $students->links() }}
         </div>
     @endif
 
@@ -115,49 +117,50 @@
             Go Back
         </button>
         <form action="" wire:submit.prevent="store">
-           
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                 wire:model.lazy="name" placeholder="Enter Name" type="text" />
-                @error('name')
+            @error('name')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
-               
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="email" type="text" placeholder="Enter Email"  />
-                @error('email')
+                wire:model.lazy="email" type="text" placeholder="Enter Email" />
+            @error('email')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
-                
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="phone" placeholder="Enter Phone"  type="text" />
-                @error('phone')
+                wire:model.lazy="phone" placeholder="Enter Phone" type="text" />
+            @error('phone')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
-                
-            <select wire:model.lazy="gender"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the Gender</option>
+
+            <select wire:model.lazy="gender"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the Gender</option>
                 <option value="1">Male</option>
                 <option value="0">FeMale</option>
-               
+
             </select>
-                @error('gender')
+            @error('gender')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
-                
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="address" placeholder="Enter Address"  type="text" />
-                @error('address')
+                wire:model.lazy="address" placeholder="Enter Address" type="text" />
+            @error('address')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
-                
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="classes" placeholder="Enter classes"  type="text" />
-                @error('classes')
+                wire:model.lazy="classes" placeholder="Enter classes" type="text" />
+            @error('classes')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
             <button
@@ -174,39 +177,40 @@
             type="submit" wire:click="goBack">
             Go Back
         </button>
-        <form action="" wire:submit.prevent="update({{$student_id}})">
-           
+        <form action="" wire:submit.prevent="update({{ $student_id }})">
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                 wire:model.lazy="edit_name" placeholder="Enter Name" type="text" />
-              
-               
+
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="edit_email" type="text" placeholder="Enter Email"  />
-                
+                wire:model.lazy="edit_email" type="text" placeholder="Enter Email" />
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="edit_phone" placeholder="Enter Phone"  type="text" />
-             
-                
-            <select wire:model.lazy="edit_gender"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the Gender</option>
+                wire:model.lazy="edit_phone" placeholder="Enter Phone" type="text" />
+
+
+            <select wire:model.lazy="edit_gender"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the Gender</option>
                 <option value="1">Male</option>
                 <option value="0">FeMale</option>
-               
+
             </select>
-             
-                
+
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="edit_address" placeholder="Enter Address"  type="text" />
-               
-                
+                wire:model.lazy="edit_address" placeholder="Enter Address" type="text" />
+
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                wire:model.lazy="edit_classes" placeholder="Enter classes"  type="text" />
-          
+                wire:model.lazy="edit_classes" placeholder="Enter classes" type="text" />
+
             <button
                 class="px-4 py-2 my-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                 type="submit">

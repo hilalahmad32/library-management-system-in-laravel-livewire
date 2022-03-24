@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Category as ModelsCategory;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Category extends Component
 {
@@ -15,14 +16,19 @@ class Category extends Component
     public $category_id;
     public $edit_category_name;
     public $search;
+
+    public $totalCategory;
+
+    use WithPagination;
     public function render()
     {
+        $this->totalCategory = ModelsCategory::count();
         $searchItem = '%' . $this->search . '%';
         if ($searchItem) {
-            $categorys = ModelsCategory::orderBy('id', 'DESC')->where('category_name', 'LIKE', $searchItem)->get();
+            $categorys = ModelsCategory::orderBy('id', 'DESC')->where('category_name', 'LIKE', $searchItem)->paginate(6);
             return view('livewire.category', compact('categorys'))->layout('layout.app');
         }
-        $categorys = ModelsCategory::orderBy('id', 'DESC')->get();
+        $categorys = ModelsCategory::orderBy('id', 'DESC')->paginate(6);
         return view('livewire.category', compact('categorys'))->layout('layout.app');
     }
 

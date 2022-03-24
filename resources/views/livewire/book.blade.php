@@ -1,9 +1,9 @@
 <div>
-    <x-slot name="title">{{ __('Category') }}</x-slot>
+    <x-slot name="title">{{ __('Book') }}</x-slot>
     <a
         class="flex items-center justify-between p-4 mb-8 mt-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
         <div class="flex items-center">
-            <span>{{ __('Books (4)') }}</span>
+            <span>{{ __('Books ') }} {{ __($totalBook) }}</span>
         </div>
         <span>
             <button
@@ -59,13 +59,13 @@
                                     {{ $book->categories->category_name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $book->publishers->publisher_name}}
+                                    {{ $book->publishers->publisher_name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $book->authors->author_name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $book->book_status == 'Y' ? 'Available' : "Not Available" }}
+                                    {{ $book->book_status == 'Y' ? 'Available' : 'Not Available' }}
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center space-x-4 text-sm">
@@ -97,6 +97,7 @@
                     </tbody>
                 </table>
             </div>
+            {{ $books->links() }}
         </div>
     @endif
 
@@ -109,40 +110,43 @@
             Go Back
         </button>
         <form action="" wire:submit.prevent="store">
-           
+
             <input
                 class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                 wire:model.lazy="book_name" type="text" />
-                @error('book_name')
+            @error('book_name')
                 <span class="text-red-600">{{ $message }}</span> <br>
             @enderror
-            <select wire:model.lazy="category_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the category</option>
+            <select wire:model.lazy="category_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the category</option>
                 @foreach ($categorys as $category)
-                <option value="{{$category->id}}">{{$category->category_name}}</option>
+                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                 @endforeach
             </select>
             @error('category_id')
-            <span class="text-red-600">{{ $message }}</span> <br>
-        @enderror
-            <select wire:model.lazy="publisher_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the publisher</option>
+                <span class="text-red-600">{{ $message }}</span> <br>
+            @enderror
+            <select wire:model.lazy="publisher_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the publisher</option>
                 @foreach ($publishers as $publisher)
-                <option value="{{$publisher->id}}">{{$publisher->publisher_name}}</option>
+                    <option value="{{ $publisher->id }}">{{ $publisher->publisher_name }}</option>
                 @endforeach
             </select>
             @error('publisher_id')
-            <span class="text-red-600">{{ $message }}</span> <br>
-        @enderror
-            <select wire:model.lazy="author_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-                <option   selected>Enter the author</option>
+                <span class="text-red-600">{{ $message }}</span> <br>
+            @enderror
+            <select wire:model.lazy="author_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the author</option>
                 @foreach ($authors as $author)
-                <option value="{{$author->id}}">{{$author->author_name}}</option>
+                    <option value="{{ $author->id }}">{{ $author->author_name }}</option>
                 @endforeach
             </select>
             @error('author_id')
-            <span class="text-red-600">{{ $message }}</span> <br>
-        @enderror
+                <span class="text-red-600">{{ $message }}</span> <br>
+            @enderror
             <button
                 class="px-4 py-2 my-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                 type="submit">
@@ -159,28 +163,31 @@
         </button>
         <form action="" wire:submit.prevent="update({{ $book_id }})">
             <input
-            class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-            wire:model.lazy="edit_book_name" type="text" />
-            
-        <select wire:model.lazy="edit_category_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-            <option   selected>Enter the category</option>
-            @foreach ($categorys as $category)
-            <option value="{{$category->id}}">{{$category->category_name}}</option>
-            @endforeach
-        </select>
-       
-        <select wire:model.lazy="edit_publisher_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-            <option   selected>Enter the publisher</option>
-            @foreach ($publishers as $publisher)
-            <option value="{{$publisher->id}}">{{$publisher->publisher_name}}</option>
-            @endforeach
-        </select>
-        <select wire:model.lazy="edit_author_id"  class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
-            <option   selected>Enter the author</option>
-            @foreach ($authors as $author)
-            <option value="{{$author->id}}">{{$author->author_name}}</option>
-            @endforeach
-        </select>
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+                wire:model.lazy="edit_book_name" type="text" />
+
+            <select wire:model.lazy="edit_category_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the category</option>
+                @foreach ($categorys as $category)
+                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                @endforeach
+            </select>
+
+            <select wire:model.lazy="edit_publisher_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the publisher</option>
+                @foreach ($publishers as $publisher)
+                    <option value="{{ $publisher->id }}">{{ $publisher->publisher_name }}</option>
+                @endforeach
+            </select>
+            <select wire:model.lazy="edit_author_id"
+                class="w-full py-3 px-2 my-4 text-sm text-gray-700 placeholder-gray-900 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-dark focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input">
+                <option selected>Enter the author</option>
+                @foreach ($authors as $author)
+                    <option value="{{ $author->id }}">{{ $author->author_name }}</option>
+                @endforeach
+            </select>
             <button
                 class="px-4 py-2 my-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                 type="submit">

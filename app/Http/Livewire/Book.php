@@ -7,6 +7,7 @@ use App\Models\Book as ModelsBook;
 use App\Models\Category;
 use App\Models\Publisher;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Book extends Component
 {
@@ -31,17 +32,20 @@ class Book extends Component
 
 
     public $search;
+    public $totalBook;
 
+    use WithPagination;
     public function render()
     {
+        $this->totalBook = ModelsBook::count();
         $this->publishers = Publisher::orderBy('id', 'DESC')->get();
         $this->categorys = Category::orderBy('id', 'DESC')->get();
         $this->authors = Author::orderBy('id', 'DESC')->get();
         if ($this->search != "") {
-            $books = ModelsBook::orderBy('id', 'DESC')->where('book_name', 'LIKE', '%' . $this->search . '%')->get();
+            $books = ModelsBook::orderBy('id', 'DESC')->where('book_name', 'LIKE', '%' . $this->search . '%')->paginate(6);
             return view('livewire.book', compact('books'))->layout('layout.app');
         } else {
-            $books = ModelsBook::orderBy('id', 'DESC')->get();
+            $books = ModelsBook::orderBy('id', 'DESC')->paginate(6);
             return view('livewire.book', compact('books'))->layout('layout.app');
         }
     }

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Author as ModelsAuthor;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Author extends Component
 {
@@ -14,14 +15,19 @@ class Author extends Component
     public $search;
     public $author_id;
     public $edit_author_name;
+    public $totalAuthor;
+
+    use WithPagination;
     public function render()
     {
+        $this->totalAuthor = ModelsAuthor::count();
+
         $searchTerm = '%' . $this->search . '%';
         if ($this->search != '') {
-            $authors = ModelsAuthor::where('author_name', 'LIKE', $searchTerm)->orderBy('id', 'DESC')->get();
+            $authors = ModelsAuthor::where('author_name', 'LIKE', $searchTerm)->orderBy('id', 'DESC')->paginate(6);
             return view('livewire.author', compact('authors'))->layout('layout.app');
         }
-        $authors = ModelsAuthor::orderBy('id', 'DESC')->get();
+        $authors = ModelsAuthor::orderBy('id', 'DESC')->paginate(6);
         return view('livewire.author', compact('authors'))->layout('layout.app');
     }
 

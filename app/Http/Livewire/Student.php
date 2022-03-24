@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Student as ModelsStudent;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Student extends Component
 {
@@ -27,13 +28,16 @@ class Student extends Component
     public $edit_classes;
 
     public $search;
+    public $totalStudent;
+    use WithPagination;
     public function render()
     {
+        $this->totalStudent = ModelsStudent::count();
         if ($this->search) {
-            $students = ModelsStudent::where('name', 'LIKE', '%' . $this->search . '%')->orderBy('id', 'DESC')->get();
+            $students = ModelsStudent::where('name', 'LIKE', '%' . $this->search . '%')->orderBy('id', 'DESC')->paginate(6);
             return view('livewire.student', compact('students'))->layout('layout.app');
         }
-        $students = ModelsStudent::orderBy('id', 'DESC')->get();
+        $students = ModelsStudent::orderBy('id', 'DESC')->paginate(6);
 
         return view('livewire.student', compact('students'))->layout('layout.app');
     }

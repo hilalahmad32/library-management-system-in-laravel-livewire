@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Publisher as ModelsPublisher;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Publisher extends Component
 {
@@ -14,14 +15,19 @@ class Publisher extends Component
     public $publisher_name;
     public $publisher_id;
     public $edit_publisher_name;
+
+    public $totalPublisher;
+
+    use WithPagination;
     public function render()
     {
+        $this->totalPublisher = ModelsPublisher::count();
         $searchItem = '%' . $this->search . '%';
         if ($searchItem) {
-            $publishers = ModelsPublisher::orderBy('id', 'DESC')->where('publisher_name', 'LIKE', $searchItem)->get();
+            $publishers = ModelsPublisher::orderBy('id', 'DESC')->where('publisher_name', 'LIKE', $searchItem)->paginate(6);
             return view('livewire.publisher', compact('publishers'))->layout('layout.app');
         }
-        $publishers = ModelsPublisher::orderBy('id', 'DESC')->get();
+        $publishers = ModelsPublisher::orderBy('id', 'DESC')->paginate(6);
         return view('livewire.publisher', compact('publishers'))->layout('layout.app');
     }
 

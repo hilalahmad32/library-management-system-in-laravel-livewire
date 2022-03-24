@@ -3,7 +3,7 @@
     <a
         class="flex items-center justify-between p-4 mb-8 mt-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">
         <div class="flex items-center">
-            <span>{{ __('Publishers (4)') }}</span>
+            <span>{{ __('Publishers ') }} {{ __($totalPublisher) }}</span>
         </div>
         <span>
             <button
@@ -81,6 +81,8 @@
                     </tbody>
                 </table>
             </div>
+
+            {{ $publishers->links() }}
         </div>
     @endif
     @if ($createForm == true)
